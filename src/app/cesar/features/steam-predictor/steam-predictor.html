@@ -1,49 +1,72 @@
-<div class="predictor-wrapper">
-  <header class="module-header">
-    <h2>Dataset de Entrenamiento: Steam</h2>
-    <p>Modifica los datos históricos para ajustar el modelo. El algoritmo utilizará estos puntos para proyectar ganancias hasta 2030.</p>
-  </header>
+<div class="main-content">
+  
+  <!-- PASO 1: UPLOAD DATASET -->
+  <div *ngIf="currentStep === 'upload'" class="step-container">
+    <header class="step-header">
+      <h2>Upload Dataset</h2>
+      <p>Drag and drop a CSV file to begin data ingestion.</p>
+    </header>
 
-  <form [formGroup]="datasetForm" (ngSubmit)="onSubmit()" class="data-form">
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Año (Variable Independiente X)</th>
-            <th>Ganancias en Billones $ (Variable Dependiente Y)</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody formArrayName="dataPoints">
-          <!-- Iteramos sobre cada fila del FormArray -->
-          <tr *ngFor="let point of dataPoints.controls; let i=index" [formGroupName]="i">
-            <td>
-              <input type="number" formControlName="year" class="form-input">
-            </td>
-            <td>
-              <input type="number" step="0.1" formControlName="revenue" class="form-input">
-            </td>
-            <td>
-              <button type="button" class="btn-danger" (click)="removeDataPoint(i)">
-                🗑️ Eliminar
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="drag-drop-zone" (click)="fileInput.click()">
+      <div class="upload-icon">📄</div>
+      <h3>Drop file here</h3>
+      <p>or click to browse from local directory</p>
+      <small>SUPPORTED FORMATS: CSV (MAX 5 FILES)</small>
+      <input #fileInput type="file" multiple accept=".csv" (change)="onFileSelected($event)" style="display: none;">
     </div>
-    
-    <div class="actions-footer">
-      <button type="button" class="btn-secondary" (click)="addDataPoint()">+ Añadir Fila Vacía</button>
-      <button type="submit" class="btn-primary" [disabled]="datasetForm.invalid">Entrenar Modelo Matemático</button>
-    </div>
-  </form>
 
-  <div class="chart-container" *ngIf="mostrarGrafica">
-    <canvas baseChart
-        [data]="chartData"
-        [options]="chartOptions"
-        [type]="'line'">
-    </canvas>
+    <div class="files-list" *ngIf="uploadedFiles.length > 0">
+      <h4>Archivos en cola para análisis ({{ uploadedFiles.length }}/5)</h4>
+      <div class="file-item" *ngFor="let file of uploadedFiles; let i = index">
+        <span>📊 {{ file.name }}</span>
+        <button type="button" class="btn-text-danger" (click)="removeFile(i)">Eliminar</button>
+      </div>
+    </div>
+
+    <div class="actions-footer right-align">
+      <button type="button" class="btn-primary" [disabled]="uploadedFiles.length === 0" (click)="goToConfig()">Proceed to Configuration →</button>
+    </div>
   </div>
+
+  <!-- PASO 2: CONFIGURACIÓN -->
+  <div *ngIf="currentStep === 'config'" class="step-container">
+    <header class="step-header">
+      <h2>Model Training Configuration</h2>
+      <p>Define algorithm parameters and execution environment for the current regression experiment.</p>
+    </header>
+
+    <div class="config-grid">
+      <div class="algo-card active">
+        <div>
+          <strong>Regresión Lineal Simple (Mínimos Cuadrados)</strong>
+          <p>Enfoque matemático para encontrar la línea de tendencia ideal basándose en el dataset proporcionado y proyectar datos hacia el futuro.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions-footer right-align">
+      <button type="button" class="btn-outline" (click)="goToUpload()">← Volver a los Datos</button>
+      <button type="button" class="btn-primary" (click)="startTrainingJob()">Entrenar y Graficar Modelo</button>
+    </div>
+  </div>
+
+  <!-- PASO 3: RESULTADOS (GRÁFICA) -->
+  <div *ngIf="currentStep === 'results'" class="step-container">
+    <header class="step-header">
+      <p class="subtitle">REPORTE DE EVALUACIÓN</p>
+      <h2>Model Performance Report</h2>
+      <p>Proyección calculada hasta el año 2030 utilizando el dataset ingresado.</p>
+    </header>
+
+    <div class="chart-wrapper">
+      <div class="canvas-container">
+        <canvas baseChart [data]="chartData" [options]="chartOptions" [type]="'line'"></canvas>
+      </div>
+    </div>
+
+    <div class="actions-footer right-align">
+      <button type="button" class="btn-outline" (click)="goToUpload()">← Iniciar Nuevo Experimento</button>
+    </div>
+  </div>
+
 </div>
