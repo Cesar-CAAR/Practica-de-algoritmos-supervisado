@@ -1,0 +1,49 @@
+<div class="predictor-wrapper">
+  <header class="module-header">
+    <h2>Dataset de Entrenamiento: Steam</h2>
+    <p>Modifica los datos históricos para ajustar el modelo. El algoritmo utilizará estos puntos para proyectar ganancias hasta 2030.</p>
+  </header>
+
+  <form [formGroup]="datasetForm" (ngSubmit)="onSubmit()" class="data-form">
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Año (Variable Independiente X)</th>
+            <th>Ganancias en Billones $ (Variable Dependiente Y)</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="dataPoints">
+          <!-- Iteramos sobre cada fila del FormArray -->
+          <tr *ngFor="let point of dataPoints.controls; let i=index" [formGroupName]="i">
+            <td>
+              <input type="number" formControlName="year" class="form-input">
+            </td>
+            <td>
+              <input type="number" step="0.1" formControlName="revenue" class="form-input">
+            </td>
+            <td>
+              <button type="button" class="btn-danger" (click)="removeDataPoint(i)">
+                🗑️ Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="actions-footer">
+      <button type="button" class="btn-secondary" (click)="addDataPoint()">+ Añadir Fila Vacía</button>
+      <button type="submit" class="btn-primary" [disabled]="datasetForm.invalid">Entrenar Modelo Matemático</button>
+    </div>
+  </form>
+
+  <div class="chart-container" *ngIf="mostrarGrafica">
+    <canvas baseChart
+        [data]="chartData"
+        [options]="chartOptions"
+        [type]="'line'">
+    </canvas>
+  </div>
+</div>
