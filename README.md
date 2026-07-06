@@ -1,4 +1,4 @@
-# Módulo de Analítica Predictiva
+# Módulo de Analítica Predictiva 
 
 Este repositorio contiene el módulo de **Análisis de Datos y Machine Learning (Regresión Lineal)** desarrollado en Angular. El sistema está diseñado para ingerir datasets dinámicos en formato CSV, descubrir patrones, limpiar información y proyectar tendencias futuras a través de un motor matemático de mínimos cuadrados.
 
