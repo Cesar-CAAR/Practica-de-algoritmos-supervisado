@@ -31,22 +31,51 @@
   <!-- PASO 2: CONFIGURACIÓN -->
   <div *ngIf="currentStep === 'config'" class="step-container">
     <header class="step-header">
-      <h2>Model Training Configuration</h2>
-      <p>Define algorithm parameters and execution environment for the current regression experiment.</p>
+      <h2>Configuración de Machine Learning</h2>
+      <p>Ajusta las variables de entrada y el método de procesamiento matemático.</p>
     </header>
+
+    <!-- NUEVO: Panel de Control Dinámico -->
+    <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        
+        <div>
+          <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #334155;">Eje X (Tiempo / Categoría)</label>
+          <select [(ngModel)]="selectedX" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
+            <option *ngFor="let col of availableColumns" [value]="col">{{ col }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #334155;">Eje Y (Valor a Predecir)</label>
+          <select [(ngModel)]="selectedY" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
+            <option *ngFor="let col of availableColumns" [value]="col">{{ col }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="display: block; font-weight: bold; margin-bottom: 8px; color: #334155;">Método de Agrupación</label>
+          <select [(ngModel)]="aggregationMethod" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
+            <option value="sum">Sumatoria Total</option>
+            <option value="avg">Promedio (Media)</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
 
     <div class="config-grid">
       <div class="algo-card active">
         <div>
-          <strong>Regresión Lineal Simple (Mínimos Cuadrados)</strong>
-          <p>Enfoque matemático para encontrar la línea de tendencia ideal basándose en el dataset proporcionado y proyectar datos hacia el futuro.</p>
+          <strong>Algoritmo: Regresión Lineal Simple</strong>
+          <p>Proyecta la tendencia utilizando mínimos cuadrados ordinarios.</p>
         </div>
       </div>
     </div>
 
     <div class="actions-footer right-align">
       <button type="button" class="btn-outline" (click)="goToUpload()">← Volver a los Datos</button>
-      <button type="button" class="btn-primary" (click)="startTrainingJob()">Entrenar y Graficar Modelo</button>
+      <button type="button" class="btn-primary" (click)="startTrainingJob()">Entrenar y Graficar</button>
     </div>
   </div>
 
