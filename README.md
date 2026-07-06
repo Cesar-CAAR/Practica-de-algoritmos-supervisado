@@ -1,59 +1,22 @@
-# Algoritmos
+# Project Alpha - Módulo de Analítica Predictiva
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.16.
+Este repositorio contiene el módulo de **Análisis de Datos y Machine Learning (Regresión Lineal)** desarrollado en Angular. El sistema está diseñado para ingerir datasets dinámicos en formato CSV, descubrir patrones, limpiar información y proyectar tendencias futuras a través de un motor matemático de mínimos cuadrados.
 
-## Development server
+---
 
-To start a local development server, run:
+## Características Principales
 
-```bash
-ng serve
-```
+*   **Ingesta Dinámica (Drag & Drop):** Soporta la carga de archivos CSV con auto-descubrimiento de columnas mediante `PapaParse`.
+*   **Motor de Mapeo Inteligente:** Detecta automáticamente variables de Tiempo (Eje X) y variables de Valor (Eje Y) basándose en expresiones regulares y nomenclatura de bases de datos.
+*   **Pipeline de Transformación:** Agrupa y limpia datos en tiempo real, permitiendo al usuario elegir operaciones matemáticas como **Sumatoria Total** o **Promedio**.
+*   **Regresión Lineal (Machine Learning):** Servicio matemático independiente (`RegressionService`) que calcula tendencias y proyecta el comportamiento futuro.
+*   **Visualización Interactiva:** Renderizado de proyecciones mediante `Chart.js` y `ng2-charts` con soporte responsivo.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Stack Tecnológico
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+*   **Framework:** Angular (v21+)
+*   **Lenguaje:** TypeScript / HTML5 / CSS3
+*   **Procesamiento de Datos:** PapaParse
+*   **Gráficas y Visualización:** Chart.js + ng2-charts
