@@ -1,1 +1,165 @@
-<p>character-manager works!</p>
+<div class="character-page">
+  <header class="character-header">
+    <a routerLink="/dashboard" class="back-link">← Volver al panel</a>
+
+    <p class="subtitle">CLASIFICACIÓN DE PERSONAJES</p>
+
+    <h1>Identificador de personajes de videojuegos</h1>
+
+    <p>
+      Sube una imagen del personaje. El sistema intentará reconocerlo y consultar información contextual como saga, descripción, juegos, géneros y plataformas.
+    </p>
+  </header>
+
+  <section class="upload-card">
+    <div
+      class="drop-zone"
+      [class.dragging]="isDragging"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+    >
+      <input
+        #fileInput
+        type="file"
+        accept="image/*"
+        hidden
+        (change)="onFileSelected($event)"
+      />
+
+      <div *ngIf="!previewUrl" class="empty-upload">
+        <div class="upload-icon">🎮</div>
+
+        <h2>Selecciona una imagen</h2>
+
+        <p>
+          Arrastra una imagen aquí o haz clic para buscarla en tu equipo.
+        </p>
+
+        <small>
+          Formatos soportados: JPG, PNG, WEBP. Máximo 5 MB.
+        </small>
+      </div>
+
+      <div *ngIf="previewUrl" class="preview-wrapper">
+        <img [src]="previewUrl" alt="Vista previa del personaje" />
+      </div>
+    </div>
+
+    <div *ngIf="selectedFile" class="file-info">
+      <div>
+        <strong>{{ selectedFile.name }}</strong>
+        <span>
+          {{ (selectedFile.size / 1024 / 1024) | number:'1.2-2' }} MB
+        </span>
+      </div>
+
+      <button type="button" class="btn-text" (click)="clearSelection()">
+        Quitar
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert error">
+      {{ errorMessage }}
+    </div>
+
+    <div class="actions">
+      <button
+        type="button"
+        class="btn-primary"
+        [disabled]="!selectedFile || isLoading"
+        (click)="recognizeCharacter()"
+      >
+        {{ isLoading ? 'Reconociendo...' : 'Identificar personaje' }}
+      </button>
+    </div>
+  </section>
+
+  <section *ngIf="isLoading" class="loading-card">
+    <div class="spinner"></div>
+
+    <h3>Analizando imagen</h3>
+
+    <p>
+      Reconociendo el personaje y consultando información en IGDB...
+    </p>
+  </section>
+
+  <section *ngIf="result" class="result-card">
+    <div class="result-header">
+      <div>
+        <p class="subtitle">RESULTADO</p>
+
+        <h2>{{ result.personaje }}</h2>
+
+        <p class="saga">
+          {{ result.saga || 'Saga no disponible' }}
+        </p>
+
+        <p *ngIf="result.tipoPersonaje" class="character-type">
+          Tipo de personaje: {{ result.tipoPersonaje }}
+        </p>
+      </div>
+
+      <div class="confidence-box">
+        <span>Confianza</span>
+        <strong>{{ result.confianza | percent:'1.0-2' }}</strong>
+      </div>
+    </div>
+
+    <div *ngIf="result.coberturaLimitada" class="alert warning">
+      La información puede estar incompleta porque IGDB no siempre tiene cobertura total para sagas de nicho o doujin.
+    </div>
+
+    <div class="description-block">
+      <h3>Descripción</h3>
+
+      <p>
+        {{ result.descripcion || 'No hay descripción disponible para este personaje.' }}
+      </p>
+    </div>
+
+    <div class="games-block">
+      <h3>Juegos relacionados</h3>
+
+      <div *ngIf="result.juegos.length === 0" class="empty-result">
+        No se encontraron juegos asociados en IGDB.
+      </div>
+
+      <div *ngIf="result.juegos.length > 0" class="games-grid">
+        <article *ngFor="let game of result.juegos" class="game-card">
+          <h4>{{ game.nombre }}</h4>
+
+          <div class="tags-section">
+            <span class="label">Géneros</span>
+
+            <div class="tags">
+              <span *ngFor="let genre of game.generos" class="tag">
+                {{ genre }}
+              </span>
+
+              <span *ngIf="game.generos.length === 0" class="tag muted">
+                No disponible
+              </span>
+            </div>
+          </div>
+
+          <div class="tags-section">
+            <span class="label">Plataformas</span>
+
+            <div class="tags">
+              <span *ngFor="let platform of game.plataformas" class="tag platform">
+                {{ platform }}
+              </span>
+
+              <span *ngIf="game.plataformas.length === 0" class="tag muted">
+                No disponible
+              </span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
